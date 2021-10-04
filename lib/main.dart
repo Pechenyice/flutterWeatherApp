@@ -13,7 +13,10 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: WeatherAppMain(), theme: ThemeData(fontFamily: 'Manrope'));
+      theme: ThemeData(fontFamily: 'Manrope'),
+      initialRoute: '/',
+      routes: {'/': (context) => WeatherAppMain()},
+    );
   }
 }
 
@@ -104,24 +107,25 @@ class _WeatherAppMainState extends State<WeatherAppMain>
         ),
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
         child: Center(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(imageUrl),
-            VerticalDivider(
-              width: 14.0,
-              thickness: 0,
-              color: Colors.transparent,
-            ),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.w600,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(imageUrl),
+              VerticalDivider(
+                width: 14.0,
+                thickness: 0,
+                color: Colors.transparent,
               ),
-            )
-          ],
-        )),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
       );
     }
 
@@ -237,7 +241,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                                   borderRadius: BorderRadius.circular(10));
                             }),
                           ),
-                          child: const Text("Button text"),
+                          child: const Text("Прогноз на неделю"),
                         )),
                       Divider(
                         height: 16.0,
@@ -293,98 +297,213 @@ class _WeatherAppMainState extends State<WeatherAppMain>
     );
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/imgs/background_light.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Stack(children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: Center(
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(20.0, 32.0, 0.0, 0.0),
               child: Column(
                 children: [
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0.0, 0.0 + (50.0 * _controller.value)),
-                        child: Text("10˚c",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 80.0,
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.normal,
-                                letterSpacing: -10.0,
-                                height: 1.15)),
-                      );
+                  Text("Weather app",
+                      style: TextStyle(
+                          fontSize: 23.0, fontWeight: FontWeight.w800)),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 42.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset('assets/imgs/menuIcons/settings.png'),
+                              VerticalDivider(
+                                width: 14.0,
+                                thickness: 0,
+                                color: Colors.transparent,
+                              ),
+                              Text(
+                                'Настройки',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
                     },
                   ),
-                  AnimatedOpacity(
-                    opacity: !sheetIsActive ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Text("23 сент. 2021",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                        )),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 42.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset('assets/imgs/menuIcons/like.png'),
+                              VerticalDivider(
+                                width: 14.0,
+                                thickness: 0,
+                                color: Colors.transparent,
+                              ),
+                              Text(
+                                'Избранные',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 42.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset('assets/imgs/menuIcons/about.png'),
+                              VerticalDivider(
+                                width: 14.0,
+                                thickness: 0,
+                                color: Colors.transparent,
+                              ),
+                              Text(
+                                'О приложении',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+      body: Builder(
+        builder: (context) => Container(
+          padding: EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/imgs/background_light.png"),
+              fit: BoxFit.cover,
+            ),
           ),
-          bottomArea,
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Center(
+                child: Column(
                   children: [
-                    RawMaterialButton(
-                      onPressed: () {},
-                      elevation: 1.0,
-                      fillColor: Colors.blue[800],
-                      child: Icon(
-                        Icons.menu,
-                        size: 20.0,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.all(7.5),
-                      shape: CircleBorder(),
+                    AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0.0, 0.0 + (50.0 * _controller.value)),
+                          child: Text("10˚c",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 80.0,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: -10.0,
+                                  height: 1.15)),
+                        );
+                      },
                     ),
                     AnimatedOpacity(
-                      opacity: sheetIsActive ? 1.0 : 0.0,
+                      opacity: !sheetIsActive ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 200),
-                      child: Text(
-                        "Санкт-Петербург",
-                        style: TextStyle(
+                      child: Text("23 сент. 2021",
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600),
-                      ),
+                            fontSize: 20.0,
+                          )),
                     ),
-                    RawMaterialButton(
-                      onPressed: () {},
-                      elevation: 1.0,
-                      fillColor: Colors.blue[800],
-                      child: Icon(
-                        Icons.add,
-                        size: 20.0,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.all(7.5),
-                      shape: CircleBorder(),
-                    )
                   ],
                 ),
               ),
-            ],
-          ),
-        ]),
+            ),
+            bottomArea,
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RawMaterialButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        elevation: 1.0,
+                        fillColor: Colors.blue[800],
+                        child: Icon(
+                          Icons.menu,
+                          size: 20.0,
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.all(7.5),
+                        shape: CircleBorder(),
+                      ),
+                      AnimatedOpacity(
+                        opacity: sheetIsActive ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: Text(
+                          "Санкт-Петербург",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      RawMaterialButton(
+                        onPressed: () {},
+                        elevation: 1.0,
+                        fillColor: Colors.blue[800],
+                        child: Icon(
+                          Icons.add,
+                          size: 20.0,
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.all(7.5),
+                        shape: CircleBorder(),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }
