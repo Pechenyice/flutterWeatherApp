@@ -69,6 +69,9 @@ flutter:
     - assets/imgs/weatherInfo/pa.png
     - assets/imgs/weatherInfo/temp.png
     - assets/imgs/weatherInfo/water.png
+    - assets/imgs/menuIcons/settings.png
+    - assets/imgs/menuIcons/like.png
+    - assets/imgs/menuIcons/about.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
