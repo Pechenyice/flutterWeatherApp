@@ -1,5 +1,6 @@
 import 'dart:ui';
-import 'weatherAppMain.dart'
+import 'pages/weather_app_main.dart';
+import 'pages/weather_app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
