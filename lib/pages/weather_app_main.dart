@@ -134,7 +134,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
         maxChildSize: 0.6,
         builder: (BuildContext context, ScrollController scrollController) {
           return ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
             child: Container(
               color: Color(0xFFE2EBFF),
               child: SingleChildScrollView(
@@ -188,7 +188,9 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                       if (!sheetIsActive)
                         Center(
                             child: OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/week');
+                              },
                               style: ButtonStyle(
                                 backgroundColor:
                                 MaterialStateProperty.resolveWith<Color>(
@@ -379,7 +381,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                       ],
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/about');
                     },
                   ),
                 ],
@@ -444,8 +446,8 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        elevation: 1.0,
-                        fillColor: Colors.blue[800],
+                        elevation: 4.0,
+                        fillColor: Color(0xFF0256FF),
                         child: Icon(
                           Icons.menu,
                           size: 20.0,
@@ -466,9 +468,11 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         ),
                       ),
                       RawMaterialButton(
-                        onPressed: () {},
-                        elevation: 1.0,
-                        fillColor: Colors.blue[800],
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/addPreference');
+                        },
+                        elevation: 4.0,
+                        fillColor: Color(0xFF0256FF),
                         child: Icon(
                           Icons.add,
                           size: 20.0,
