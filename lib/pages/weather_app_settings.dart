@@ -55,22 +55,26 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
               });
             },
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-                child: Text(
-                  valuesNamesList[0],
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0),
+              SizedBox(
+                width: 65.0,
+                child: Center(
+                  child: Text(
+                    valuesNamesList[0],
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.0),
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-                child: Text(
-                  valuesNamesList[1],
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0),
+              SizedBox(
+                width: 65.0,
+                child: Center(
+                  child: Text(
+                    valuesNamesList[1],
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.0),
+                  ),
                 ),
               ),
             ],
