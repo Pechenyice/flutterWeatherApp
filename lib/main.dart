@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'pages/weather_app_main.dart';
 import 'pages/weather_app_settings.dart';
+import 'pages/weather_app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,8 @@ class WeatherApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => WeatherAppMain(),
-        '/settings': (context) => WeatherAppSettings()
+        '/settings': (context) => WeatherAppSettings(),
+        '/preferences': (context) => WeatherAppPreferences()
       },
     );
   }
