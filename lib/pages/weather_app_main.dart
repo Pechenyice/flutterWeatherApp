@@ -349,7 +349,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                       ],
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/preferences');
                     },
                   ),
                   InkWell(
