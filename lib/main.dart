@@ -20,7 +20,7 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Manrope'),
-      initialRoute: '/',
+      initialRoute: '/loading',
       routes: {
         '/': (context) => WeatherAppMain(),
         '/loading': (context) => WeatherAppLoading(),
