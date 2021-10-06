@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class WeatherAppWeek extends StatefulWidget {
   const WeatherAppWeek({Key? key}) : super(key: key);
@@ -8,6 +11,31 @@ class WeatherAppWeek extends StatefulWidget {
 }
 
 class _WeatherAppWeekState extends State<WeatherAppWeek> {
+  bool isC = true;
+  bool isMpS = true;
+  bool isMm = true;
+
+  late DateFormat dateFormat;
+
+  Map args = {};
+
+  Future<void> initPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> tempS = prefs.getStringList('tempSettings') ?? ["1", "0"];
+    List<String> windS = prefs.getStringList('windSettings') ?? ["1", "0"];
+    List<String> paS = prefs.getStringList('paSettings') ?? ["1", "0"];
+    isC = tempS[0] == '1' ? true : false;
+    isMpS = windS[0] == '1' ? true : false;
+    isMm = paS[0] == '1' ? true : false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+    initializeDateFormatting();
+    dateFormat = new DateFormat.yMMMMd('ru');
+  }
 
   Widget WeatherRow(imageUrl, text) {
     return Row(
@@ -30,8 +58,34 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
     );
   }
 
+  String getWeatherIconPath(weather) {
+    String imgPath;
+    switch (weather) {
+      case 'Clouds': {
+        imgPath = 'assets/imgs/weatherPreview/rain_small.png';
+        break;
+      }
+      case 'Clear': {
+        imgPath = 'assets/imgs/weatherPreview/sun.png';
+        break;
+      }
+      case 'Rain': {
+        imgPath = 'assets/imgs/weatherPreview/rain.png';
+        break;
+      }
+      default: {
+        imgPath = 'assets/imgs/weatherPreview/spark.png';
+        break;
+      }
+    }
+    return imgPath;
+  }
+
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)!.settings.arguments as Map;
+    var dateTime = new DateTime.now();
+
     return Scaffold(
       body: Container(
         color: Color(0xFFE2EBFF),
@@ -68,7 +122,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             Text(
-                              "23 сентября",
+                    dateFormat.format(dateTime),
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.w600
@@ -80,7 +134,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             Image.asset(
-                                "assets/imgs/weatherPreview/rain.png",
+                              getWeatherIconPath(args['icon']),
                               width: 80.0,
                             ),
                           ],
@@ -89,7 +143,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             WeatherRow(
-                                'assets/imgs/weatherInfo/temp.png', '8˚c'),
+                                'assets/imgs/weatherInfo/temp.png', '${args['temp']}${isC ? '˚C' : '˚F'}'),
                           ],
                         ),
                         Divider(
@@ -101,7 +155,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                           children: [
                             WeatherRow(
                                 'assets/imgs/weatherInfo/breeze.png',
-                                '9м/с'),
+                                '${args['wind']}${isMpS ? 'м/с' : 'км/ч'}'),
                           ],
                         ),
                         Divider(
@@ -112,7 +166,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             WeatherRow(
-                                'assets/imgs/weatherInfo/water.png', '87%'),
+                                'assets/imgs/weatherInfo/water.png', '${args['humidity']}%'),
                           ],
                         ),
                         Divider(
@@ -123,7 +177,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             WeatherRow('assets/imgs/weatherInfo/pa.png',
-                                '761 мм.рт.ст'),
+                                '${args['pressure']} ${isMm ? 'мм.рт.ст' : 'Па'}'),
                           ],
                         ),
                       ],
