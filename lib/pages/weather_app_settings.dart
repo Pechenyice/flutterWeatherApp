@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppSettings extends StatefulWidget {
   const WeatherAppSettings({Key? key}) : super(key: key);
@@ -8,12 +9,31 @@ class WeatherAppSettings extends StatefulWidget {
 }
 
 class _WeatherAppSettingsState extends State<WeatherAppSettings> {
-  List<bool> tempSettings = [true, false];
-  List<bool> windSettings = [true, false];
-  List<bool> paSettings = [false, true];
+  List<String> tempSettings = ["1", "0"];
+  List<String> windSettings = ["1", "0"];
+  List<String> paSettings = ["1", "0"];
+
+  Future<void> initSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      tempSettings = prefs.getStringList('tempSettings') ?? ["1", "0"];
+      windSettings = prefs.getStringList('windSettings') ?? ["1", "0"];
+      paSettings = prefs.getStringList('paSettings') ?? ["1", "0"];
+    });
+    // await prefs.setInt('counter', counter);
+  }
+
+  @protected
+  @override
+  @mustCallSuper
+  void initState() {
+    super.initState();
+    initSettings();
+  }
 
   // setting for 2 toggles only
-  Widget createSetting(name, valuesList, valuesNamesList) {
+  Widget createSetting(
+      name, valuesList, proxyList, proxyName, valuesNamesList) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -45,14 +65,14 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
             color: Colors.black,
             selectedColor: Colors.white,
             fillColor: Colors.blue[900],
-            onPressed: (int newIndex) {
+            onPressed: (int newIndex) async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
               setState(() {
-                for (int i = 0; i < valuesList.length; i++) {
-                  i == newIndex ?
-                  valuesList[i] = true :
-                  valuesList[i] = false;
+                for (int i = 0; i < proxyList.length; i++) {
+                  i == newIndex ? proxyList[i] = "1" : proxyList[i] = "0";
                 }
               });
+              prefs.setStringList(proxyName, proxyList);
             },
             children: <Widget>[
               SizedBox(
@@ -60,9 +80,8 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                 child: Center(
                   child: Text(
                     valuesNamesList[0],
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.0),
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
                   ),
                 ),
               ),
@@ -71,9 +90,8 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                 child: Center(
                   child: Text(
                     valuesNamesList[1],
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.0),
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
                   ),
                 ),
               ),
@@ -140,19 +158,43 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                       vertical: 16.0, horizontal: 20.0),
                   child: Column(
                     children: [
-                      createSetting('Температура', tempSettings, ['˚C', '˚F']),
+                      createSetting(
+                          'Температура',
+                          [
+                            tempSettings[0] == "1" ? true : false,
+                            tempSettings[1] == "1" ? true : false
+                          ],
+                          tempSettings,
+                          "tempSettings",
+                          ['˚C', '˚F']),
                       Divider(
                         height: 32.0,
                         thickness: 1.0,
                         color: Colors.black.withOpacity(.15),
                       ),
-                      createSetting('Сила ветра', windSettings, ['м/с', 'км/ч']),
+                      createSetting(
+                          'Сила ветра',
+                          [
+                            windSettings[0] == "1" ? true : false,
+                            windSettings[1] == "1" ? true : false
+                          ],
+                          windSettings,
+                          "windSettings",
+                          ['м/с', 'км/ч']),
                       Divider(
                         height: 32.0,
                         thickness: 1.0,
                         color: Colors.black.withOpacity(.15),
                       ),
-                      createSetting('Давление', paSettings, ['мм.рт.ст.', 'гПа'])
+                      createSetting(
+                          'Давление',
+                          [
+                            paSettings[0] == "1" ? true : false,
+                            paSettings[1] == "1" ? true : false
+                          ],
+                          paSettings,
+                          "paSettings",
+                          ['мм.рт.ст.', 'гПа'])
                     ],
                   ),
                 ),
