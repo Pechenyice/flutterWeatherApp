@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppPreferences extends StatefulWidget {
   @override
@@ -6,7 +7,26 @@ class WeatherAppPreferences extends StatefulWidget {
 }
 
 class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
-  List cities = ['Москва', 'Санкт-Петербург'];
+  List<String> cities = ['Москва', 'Санкт-Петербург'];
+
+  Future<void> initPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      cities = prefs.getStringList('cities') ?? ['Санкт-Петербург'];
+    });
+    if (prefs.getStringList('cities') == null) {
+      prefs.setStringList('cities', cities);
+    }
+    // await prefs.setInt('counter', counter);
+  }
+
+  @protected
+  @override
+  @mustCallSuper
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +69,23 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
                     ]),
                 child: ListTile(
                   title: Text(word),
-                  trailing: Icon(
-                    Icons.delete_forever,
-                    color: Colors.black,
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete_forever,
+                      color: Colors.black,
+                    ),
+                    onPressed: () async {
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      setState(() {
+                        cities.removeAt(index);
+                      });
+                      prefs.setStringList('cities', cities);
+                    },
                   ),
-                  onTap: () {
-                    setState(() {
-                      cities.removeAt(index);
-                    });
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setString('activeCity', cities.elementAt(index));
+                    print(cities.elementAt(index));
                   },
                 ),
               );
