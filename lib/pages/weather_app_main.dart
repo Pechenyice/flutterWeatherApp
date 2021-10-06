@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class WeatherAppMain extends StatefulWidget {
   const WeatherAppMain({Key? key}) : super(key: key);
@@ -11,7 +14,28 @@ class _WeatherAppMainState extends State<WeatherAppMain>
     with TickerProviderStateMixin {
   bool sheetIsActive = false;
 
+  Map args = {};
+
+  String currentCity = 'Санкт-Петербург';
+
+  bool isC = true;
+  bool isMpS = true;
+  bool isMm = true;
+
+  late DateFormat dateFormat;
+
   late final AnimationController _controller;
+
+  Future<void> initPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> tempS = prefs.getStringList('tempSettings') ?? ["1", "0"];
+    List<String> windS = prefs.getStringList('windSettings') ?? ["1", "0"];
+    List<String> paS = prefs.getStringList('paSettings') ?? ["1", "0"];
+    isC = tempS[0] == '1' ? true : false;
+    isMpS = windS[0] == '1' ? true : false;
+    isMm = paS[0] == '1' ? true : false;
+    currentCity = prefs.getString('activeCity') ?? 'Санкт-Петербург';
+  }
 
   @override
   void initState() {
@@ -20,12 +44,40 @@ class _WeatherAppMainState extends State<WeatherAppMain>
       vsync: this,
       duration: Duration(milliseconds: 200),
     );
+    initPrefs();
+    initializeDateFormatting();
+    dateFormat = new DateFormat.yMMMMd('ru');
+  }
+
+  String getWeatherIconPath(weather) {
+    String imgPath;
+    switch (weather) {
+      case 'Clouds': {
+        imgPath = 'assets/imgs/weatherPreview/rain_small.png';
+        break;
+      }
+      case 'Clear': {
+        imgPath = 'assets/imgs/weatherPreview/sun.png';
+        break;
+      }
+      case 'Rain': {
+        imgPath = 'assets/imgs/weatherPreview/rain.png';
+        break;
+      }
+      default: {
+        imgPath = 'assets/imgs/weatherPreview/spark.png';
+        break;
+      }
+    }
+    return imgPath;
   }
 
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)!.settings.arguments as Map;
     double Width = MediaQuery.of(context).size.width;
     double Height = MediaQuery.of(context).size.height;
+    var dateTime = new DateTime.now();
 
     Widget WeatherPreview(time, imageUrl, data) {
       return Container(
@@ -158,7 +210,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                             opacity: sheetIsActive ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 200),
                             child: Text(
-                              '23 сентября',
+                              dateFormat.format(dateTime),
                               style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 17.0),
                             ),
@@ -169,15 +221,15 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           WeatherPreview('06:00',
-                              'assets/imgs/weatherPreview/rain.png', '10˚c'),
+                              getWeatherIconPath(args['weather'][2]['weather'][0]['main']), '${(args['weather'][2]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview(
                               '12:00',
-                              'assets/imgs/weatherPreview/rain_small.png',
-                              '10˚c'),
+                              getWeatherIconPath(args['weather'][3]['weather'][0]['main']),
+                              '${(args['weather'][3]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview('18:00',
-                              'assets/imgs/weatherPreview/sun.png', '10˚c'),
+                              getWeatherIconPath(args['weather'][4]['weather'][0]['main']), '${(args['weather'][4]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview('00:00',
-                              'assets/imgs/weatherPreview/spark.png', '10˚c'),
+                              getWeatherIconPath(args['weather'][5]['weather'][0]['main']), '${(args['weather'][5]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                         ],
                       ),
                       Divider(
@@ -189,7 +241,13 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         Center(
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/week');
+                                Navigator.pushNamed(context, '/week', arguments: {
+                                  'temp': (args['weather'][0]['main']['temp'] - 273).toStringAsFixed(1),
+                                  'pressure': args['weather'][0]['main']['pressure'],
+                                  'humidity': args['weather'][0]['main']['humidity'],
+                                  'wind': (args['weather'][0]['wind']['speed']).toStringAsFixed(1),
+                                  'icon': args['weather'][0]['weather'][0]['main'],
+                                });
                               },
                               style: ButtonStyle(
                                 backgroundColor:
@@ -237,7 +295,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                             Column(
                               children: <Widget>[
                                 WeatherInfo(
-                                    'assets/imgs/weatherInfo/temp.png', '8˚c'),
+                                    'assets/imgs/weatherInfo/temp.png', '${(args['weather'][1]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                                 Divider(
                                   height: 8.0,
                                   thickness: 0.0,
@@ -245,7 +303,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                                 ),
                                 WeatherInfo(
                                     'assets/imgs/weatherInfo/breeze.png',
-                                    '9м/с'),
+                                    '${(args['weather'][1]['wind']['speed']).toStringAsFixed(1)}${isMpS ? 'м/с' : 'км/ч'}'),
                               ],
                             ),
                             // VerticalDivider(
@@ -256,14 +314,14 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                             Column(
                               children: <Widget>[
                                 WeatherInfo(
-                                    'assets/imgs/weatherInfo/water.png', '87%'),
+                                    'assets/imgs/weatherInfo/water.png', '${(args['weather'][1]['main']['humidity'])}%'),
                                 Divider(
                                   height: 8.0,
                                   thickness: 0.0,
                                   color: Colors.transparent,
                                 ),
                                 WeatherInfo('assets/imgs/weatherInfo/pa.png',
-                                    '761 мм.рт.ст'),
+                                    '${(args['weather'][1]['main']['pressure'])} ${isMm ? 'мм.рт.ст' : 'Па'}'),
                               ],
                             )
                           ],
@@ -410,7 +468,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                       builder: (context, child) {
                         return Transform.translate(
                           offset: Offset(0.0, 0.0 + (50.0 * _controller.value)),
-                          child: Text("10˚c",
+                          child: Text("${(args['weather'][1]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 80.0,
@@ -424,7 +482,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                     AnimatedOpacity(
                       opacity: !sheetIsActive ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 200),
-                      child: Text("23 сент. 2021",
+                      child: Text(dateFormat.format(dateTime),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -460,7 +518,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         opacity: sheetIsActive ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 200),
                         child: Text(
-                          "Санкт-Петербург",
+                          currentCity,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
