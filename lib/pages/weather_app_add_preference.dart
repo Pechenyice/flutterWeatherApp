@@ -1,19 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppAddPreference extends StatefulWidget {
   const WeatherAppAddPreference({Key? key}) : super(key: key);
 
   @override
-  _WeatherAppAddPreferenceState createState() => _WeatherAppAddPreferenceState();
+  _WeatherAppAddPreferenceState createState() =>
+      _WeatherAppAddPreferenceState();
 }
 
 class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
-  List cities = ['Санкт-петербург', 'Москва'];
+  List<String> constCities = ['Санкт-Петербург', 'Москва'];
+  List<String> cities = ['Санкт-Петербург', 'Москва'];
   Set<String> savedCities = Set<String>();
+
+  Future<void> initPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      print(prefs.getStringList('cities'));
+      savedCities =
+          (prefs.getStringList('cities') ?? ['Санкт-Петербург']).toSet();
+    });
+    if (prefs.getStringList('cities') == null) {
+      prefs.setStringList('cities', savedCities.toList());
+    }
+    // await prefs.setInt('counter', counter);
+  }
+
+  var _controller = TextEditingController();
+
+  void _latestValue() {
+    setState(() {
+      cities = constCities.toList().where((c) => c.startsWith(_controller.text)).toList();
+    });
+  }
+
+  @protected
+  @override
+  @mustCallSuper
+  void initState() {
+    super.initState();
+    initPrefs();
+    _controller.addListener(_latestValue);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFE2EBFF),
@@ -46,11 +78,14 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
                   ),
                 ),
               ),
-              SizedBox(height: 20.0,),
+              SizedBox(
+                height: 20.0,
+              ),
               Expanded(
                 child: ListView.separated(
                   itemCount: cities.length,
-                  separatorBuilder: (BuildContext context, int index) => Divider(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(),
                   itemBuilder: (BuildContext context, int index) {
                     String word = cities[index];
                     bool isSaved = savedCities.contains(word);
@@ -72,12 +107,15 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
                           isSaved ? Icons.star : Icons.star_border,
                           color: Colors.black,
                         ),
-                        onTap: () {
+                        onTap: () async {
                           setState(() {
-                            setState(() {
-                              isSaved ? savedCities.remove(word) : savedCities.add(word);
-                            });
+                            isSaved
+                                ? savedCities.remove(word)
+                                : savedCities.add(word);
                           });
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setStringList("cities", savedCities.toList());
                         },
                       ),
                     );
