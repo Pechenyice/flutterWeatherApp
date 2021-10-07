@@ -24,9 +24,11 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
     List<String> tempS = prefs.getStringList('tempSettings') ?? ["1", "0"];
     List<String> windS = prefs.getStringList('windSettings') ?? ["1", "0"];
     List<String> paS = prefs.getStringList('paSettings') ?? ["1", "0"];
-    isC = tempS[0] == '1' ? true : false;
-    isMpS = windS[0] == '1' ? true : false;
-    isMm = paS[0] == '1' ? true : false;
+    setState(() {
+      isC = tempS[0] == '1' ? true : false;
+      isMpS = windS[0] == '1' ? true : false;
+      isMm = paS[0] == '1' ? true : false;
+    });
   }
 
   @override
@@ -143,7 +145,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         Row(
                           children: [
                             WeatherRow(
-                                'assets/imgs/weatherInfo/temp.png', '${args['temp']}${isC ? '˚C' : '˚F'}'),
+                                'assets/imgs/weatherInfo/temp.png', '${isC ? args['temp'] : (double.parse(args['temp']) * 9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           ],
                         ),
                         Divider(
@@ -155,7 +157,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                           children: [
                             WeatherRow(
                                 'assets/imgs/weatherInfo/breeze.png',
-                                '${args['wind']}${isMpS ? 'м/с' : 'км/ч'}'),
+                                '${(isMpS ? args['wind'] : (double.parse(args['wind']) * 3.6).toStringAsFixed(1))}${isMpS ? 'м/с' : 'км/ч'}'),
                           ],
                         ),
                         Divider(
