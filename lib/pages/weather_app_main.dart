@@ -31,10 +31,12 @@ class _WeatherAppMainState extends State<WeatherAppMain>
     List<String> tempS = prefs.getStringList('tempSettings') ?? ["1", "0"];
     List<String> windS = prefs.getStringList('windSettings') ?? ["1", "0"];
     List<String> paS = prefs.getStringList('paSettings') ?? ["1", "0"];
-    isC = tempS[0] == '1' ? true : false;
-    isMpS = windS[0] == '1' ? true : false;
-    isMm = paS[0] == '1' ? true : false;
-    currentCity = prefs.getString('activeCity') ?? 'Санкт-Петербург';
+    setState(() {
+      isC = tempS[0] == '1' ? true : false;
+      isMpS = windS[0] == '1' ? true : false;
+      isMm = paS[0] == '1' ? true : false;
+      currentCity = prefs.getString('activeCity') ?? 'Санкт-Петербург';
+    });
   }
 
   @override
@@ -221,15 +223,15 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           WeatherPreview('06:00',
-                              getWeatherIconPath(args['weather'][2]['weather'][0]['main']), '${(args['weather'][2]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
+                              getWeatherIconPath(args['weather'][2]['weather'][0]['main']), '${(isC ? (args['weather'][2]['main']['temp'] - 273) : (args['weather'][2]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview(
                               '12:00',
                               getWeatherIconPath(args['weather'][3]['weather'][0]['main']),
-                              '${(args['weather'][3]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
+                              '${(isC ? (args['weather'][3]['main']['temp'] - 273) : (args['weather'][3]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview('18:00',
-                              getWeatherIconPath(args['weather'][4]['weather'][0]['main']), '${(args['weather'][4]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
+                              getWeatherIconPath(args['weather'][4]['weather'][0]['main']), '${(isC ? (args['weather'][4]['main']['temp'] - 273) : (args['weather'][4]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                           WeatherPreview('00:00',
-                              getWeatherIconPath(args['weather'][5]['weather'][0]['main']), '${(args['weather'][5]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
+                              getWeatherIconPath(args['weather'][5]['weather'][0]['main']), '${(isC ? (args['weather'][5]['main']['temp'] - 273) : (args['weather'][5]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                         ],
                       ),
                       Divider(
@@ -295,7 +297,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                             Column(
                               children: <Widget>[
                                 WeatherInfo(
-                                    'assets/imgs/weatherInfo/temp.png', '${(args['weather'][1]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
+                                    'assets/imgs/weatherInfo/temp.png', '${(isC ? (args['weather'][1]['main']['temp'] - 273) : (args['weather'][1]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}'),
                                 Divider(
                                   height: 8.0,
                                   thickness: 0.0,
@@ -303,7 +305,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                                 ),
                                 WeatherInfo(
                                     'assets/imgs/weatherInfo/breeze.png',
-                                    '${(args['weather'][1]['wind']['speed']).toStringAsFixed(1)}${isMpS ? 'м/с' : 'км/ч'}'),
+                                    '${(isMpS ? (args['weather'][1]['wind']['speed']) : (args['weather'][1]['wind']['speed']) * 3.6).toStringAsFixed(1)}${isMpS ? 'м/с' : 'км/ч'}'),
                               ],
                             ),
                             // VerticalDivider(
@@ -321,7 +323,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                                   color: Colors.transparent,
                                 ),
                                 WeatherInfo('assets/imgs/weatherInfo/pa.png',
-                                    '${(args['weather'][1]['main']['pressure'])} ${isMm ? 'мм.рт.ст' : 'Па'}'),
+                                    '${(args['weather'][1]['main']['pressure'])} ${isMm ? 'мм.рт.ст' : 'кПа'}'),
                               ],
                             )
                           ],
@@ -468,7 +470,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                       builder: (context, child) {
                         return Transform.translate(
                           offset: Offset(0.0, 0.0 + (50.0 * _controller.value)),
-                          child: Text("${(args['weather'][1]['main']['temp'] - 273).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}",
+                          child: Text("${(isC ? (args['weather'][1]['main']['temp'] - 273) : (args['weather'][1]['main']['temp'] - 273)*9/5 + 32).toStringAsFixed(1)}${isC ? '˚C' : '˚F'}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 80.0,
