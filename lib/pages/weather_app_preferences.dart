@@ -85,7 +85,7 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
                   onTap: () async {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.setString('activeCity', cities.elementAt(index));
-                    print(cities.elementAt(index));
+                    Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
                   },
                 ),
               );
