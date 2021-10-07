@@ -199,6 +199,59 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Изменения применятся после перезагрузки, или:',
+                      style: TextStyle(
+                          color: Color(0xFF828282),
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.resolveWith<Color>(
+                          (states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Colors.white;
+                        }
+                        return Color(0xFFEAF0FF);
+                      }),
+                  overlayColor:
+                  MaterialStateProperty.resolveWith<Color>(
+                          (states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Colors.white;
+                        }
+                        return Colors.transparent;
+                      }),
+                  side: MaterialStateProperty.resolveWith((states) {
+                    Color _borderColor;
+                    if (states.contains(MaterialState.pressed)) {
+                      _borderColor = Colors.white;
+                    }
+                    _borderColor = Colors.blue;
+
+                    return BorderSide(color: _borderColor, width: 1);
+                  }),
+                  shape: MaterialStateProperty.resolveWith<
+                      OutlinedBorder>((_) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10));
+                  }),
+                ),
+                child: const Text("Применить сразу"),
+              )
             ],
           ),
         ),
