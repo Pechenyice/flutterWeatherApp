@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppSettings extends StatefulWidget {
@@ -12,6 +13,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
   List<String> tempSettings = ["1", "0"];
   List<String> windSettings = ["1", "0"];
   List<String> paSettings = ["1", "0"];
+  List<String> themeSettings = ["1", "0"];
 
   Future<void> initSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -19,6 +21,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
       tempSettings = prefs.getStringList('tempSettings') ?? ["1", "0"];
       windSettings = prefs.getStringList('windSettings') ?? ["1", "0"];
       paSettings = prefs.getStringList('paSettings') ?? ["1", "0"];
+      themeSettings = prefs.getStringList('themeSettings') ?? ["1", "0"];
     });
     // await prefs.setInt('counter', counter);
   }
@@ -34,6 +37,15 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
   // setting for 2 toggles only
   Widget createSetting(
       name, valuesList, proxyList, proxyName, valuesNamesList) {
+
+    if (proxyName == 'themeSettings') {
+      if (valuesList[1]) {
+        ThemeColors.black = Colors.black;
+      } else {
+        ThemeColors.black = Colors.white;
+      }
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -47,7 +59,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
         Container(
           height: 25.0,
           decoration: BoxDecoration(
-            color: Color(0xFFE2EBFF),
+            color: ThemeColors.weatherBackground,
             borderRadius: BorderRadius.all(Radius.circular(10)),
             boxShadow: [
               BoxShadow(
@@ -106,7 +118,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFE2EBFF),
+        backgroundColor: ThemeColors.weatherBackground,
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
@@ -116,13 +128,13 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: ThemeColors.black,
           ),
         ),
       ),
       body: SizedBox.expand(
         child: Container(
-          color: Color(0xFFE2EBFF),
+          color: ThemeColors.weatherBackground,
           child: Column(
             children: [
               Padding(
@@ -142,7 +154,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFE2EBFF),
+                  color: ThemeColors.weatherBackground,
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                   boxShadow: [
                     BoxShadow(
@@ -194,7 +206,21 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                           ],
                           paSettings,
                           "paSettings",
-                          ['мм.рт.ст.', 'гПа'])
+                          ['мм.рт.ст.', 'гПа']),
+                      Divider(
+                        height: 32.0,
+                        thickness: 1.0,
+                        color: Colors.black.withOpacity(.15),
+                      ),
+                      createSetting(
+                          'Тема оформления',
+                          [
+                            themeSettings[0] == "1" ? true : false,
+                            themeSettings[1] == "1" ? true : false
+                          ],
+                          themeSettings,
+                          "themeSettings",
+                          ['Светлая', 'Темная']),
                     ],
                   ),
                 ),
