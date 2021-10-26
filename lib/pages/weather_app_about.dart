@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 
 class WeatherAppAbout extends StatefulWidget {
   @override
@@ -10,9 +11,9 @@ class _WeatherAppAboutState extends State<WeatherAppAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFE2EBFF),
+        backgroundColor: ThemeColors.weatherBackground,
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: ThemeColors.black,
         ),
         elevation: 0.0,
         title: Text(
@@ -20,12 +21,12 @@ class _WeatherAppAboutState extends State<WeatherAppAbout> {
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: ThemeColors.black,
           ),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Color(0xFFE2EBFF)),
+        decoration: BoxDecoration(color: ThemeColors.weatherBackground),
         child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -39,13 +40,13 @@ class _WeatherAppAboutState extends State<WeatherAppAbout> {
                       style: TextStyle(
                           fontSize: 25.0,
                           fontWeight: FontWeight.w800,
-                          color: Colors.black),
+                          color: ThemeColors.black),
                     ))),
                 Expanded(
                     flex: 1,
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Color(0xFFE2EBFF),
+                          color: ThemeColors.weatherBackground,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(15.0),
                               topRight: Radius.circular(15.0)),
@@ -69,7 +70,8 @@ class _WeatherAppAboutState extends State<WeatherAppAbout> {
                                       "by ITMO University",
                                       style: TextStyle(
                                         fontSize: 15.0,
-                                        fontWeight: FontWeight.w800
+                                        fontWeight: FontWeight.w800,
+                                        color: ThemeColors.black
                                       ),
                                     ),
                                     Text(
