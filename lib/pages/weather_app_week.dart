@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -54,6 +55,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w600,
+            color: ThemeColors.black
           ),
         )
       ],
@@ -90,7 +92,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
 
     return Scaffold(
       body: Container(
-        color: Color(0xFFE2EBFF),
+        color: ThemeColors.weatherBackground,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 34.0, horizontal: 20.0),
           child: Column(
@@ -98,7 +100,7 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
               Center(
                 child: Text(
                   "Прогноз на неделю",
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600, color: ThemeColors.black),
                 ),
               ),
               SizedBox(
@@ -112,8 +114,8 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                         end: Alignment.centerRight,
                         stops: [0.0, 1.0],
                         colors: [
-                          Color(0xFFCDDAF5),
-                          Color(0xFF9CBCFF),
+                          ThemeColors.weekGradientStart,
+                          ThemeColors.weekGradientEnd,
                         ],
                       )
                   ),
@@ -127,7 +129,8 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                     dateFormat.format(dateTime),
                               style: TextStyle(
                                 fontSize: 24.0,
-                                fontWeight: FontWeight.w600
+                                fontWeight: FontWeight.w600,
+                                color: ThemeColors.black
                               ),
                             ),
                           ],
@@ -196,9 +199,9 @@ class _WeatherAppWeekState extends State<WeatherAppWeek> {
                   MaterialStateProperty.resolveWith<Color>(
                           (states) {
                         if (states.contains(MaterialState.pressed)) {
-                          return Colors.white;
+                          return ThemeColors.white;
                         }
-                        return Color(0xFFEAF0FF);
+                        return ThemeColors.white;
                       }),
                   overlayColor:
                   MaterialStateProperty.resolveWith<Color>(
