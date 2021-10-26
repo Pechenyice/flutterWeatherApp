@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppAddPreference extends StatefulWidget {
@@ -48,9 +49,9 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFE2EBFF),
+        backgroundColor: ThemeColors.weatherBackground,
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: ThemeColors.black,
         ),
         elevation: 0.0,
         title: Text(
@@ -58,23 +59,26 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: ThemeColors.black,
           ),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Color(0xFFE2EBFF)),
+        decoration: BoxDecoration(color: ThemeColors.weatherBackground),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: Column(
             children: [
               TextField(
+                style: TextStyle(color: ThemeColors.black),
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: 'Введите город...',
+                  hintStyle: TextStyle(color: ThemeColors.black),
                   suffixIcon: IconButton(
                     onPressed: _controller.clear,
                     icon: Icon(Icons.clear),
+                    color: ThemeColors.black,
                   ),
                 ),
               ),
@@ -92,7 +96,7 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
 
                     return Container(
                       decoration: BoxDecoration(
-                          color: Color(0xFFDEE9FF),
+                          color: ThemeColors.weatherBackground,
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                           boxShadow: [
                             BoxShadow(
@@ -102,10 +106,10 @@ class _WeatherAppAddPreferenceState extends State<WeatherAppAddPreference> {
                             ),
                           ]),
                       child: ListTile(
-                        title: Text(word),
+                        title: Text(word, style: TextStyle(color: ThemeColors.black),),
                         trailing: Icon(
                           isSaved ? Icons.star : Icons.star_border,
-                          color: Colors.black,
+                          color: ThemeColors.black,
                         ),
                         onTap: () async {
                           setState(() {
