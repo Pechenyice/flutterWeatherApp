@@ -78,7 +78,14 @@ class _WeatherAppMainState extends State<WeatherAppMain>
 
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context)!.settings.arguments as Map;
+    try {
+      args = ModalRoute
+          .of(context)!
+          .settings
+          .arguments as Map;
+    } catch(e) {
+
+    }
     double Width = MediaQuery.of(context).size.width;
     double Height = MediaQuery.of(context).size.height;
     var dateTime = new DateTime.now();
