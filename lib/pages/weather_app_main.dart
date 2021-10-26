@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
+import 'package:flutter_weather_app/helpers/ThemeImages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -85,7 +87,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
       return Container(
         padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 9.0),
         decoration: BoxDecoration(
-          color: Color(0xFFE0E9FD),
+          color: ThemeColors.weatherPreview,
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
@@ -100,7 +102,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
           children: [
             Text(
               time,
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400, color: ThemeColors.black),
             ),
             Divider(
               height: 10.0,
@@ -117,7 +119,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
               style: TextStyle(
                   fontSize: 17.0,
                   fontWeight: FontWeight.w400,
-                  letterSpacing: -1.0),
+                  letterSpacing: -1.0, color: ThemeColors.black),
             ),
           ],
         ),
@@ -128,7 +130,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
       return Container(
         width: 150.0,
         decoration: BoxDecoration(
-          color: Color(0xFFE2EBFF),
+          color: ThemeColors.weatherBackground,
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
@@ -155,6 +157,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
+                  color: ThemeColors.black
                 ),
               )
             ],
@@ -190,7 +193,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
           return ClipRRect(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
             child: Container(
-              color: Color(0xFFE2EBFF),
+              color: ThemeColors.weatherBackground,
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: Padding(
@@ -214,7 +217,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                             child: Text(
                               dateFormat.format(dateTime),
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 17.0),
+                                  fontWeight: FontWeight.w600, fontSize: 17.0, color: ThemeColors.black),
                             ),
                           ),
                         ),
@@ -256,9 +259,9 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                                 MaterialStateProperty.resolveWith<Color>(
                                         (states) {
                                       if (states.contains(MaterialState.pressed)) {
-                                        return Colors.white;
+                                        return ThemeColors.white;
                                       }
-                                      return Color(0xFFEAF0FF);
+                                      return ThemeColors.white;
                                     }),
                                 overlayColor:
                                 MaterialStateProperty.resolveWith<Color>(
@@ -343,119 +346,127 @@ class _WeatherAppMainState extends State<WeatherAppMain>
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
         // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 32.0, 0.0, 0.0),
-              child: Column(
-                children: [
-                  Text("Weather app",
-                      style: TextStyle(
-                          fontSize: 23.0, fontWeight: FontWeight.w800)),
-                  InkWell(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 42.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset('assets/imgs/menuIcons/settings.png'),
-                              VerticalDivider(
-                                width: 14.0,
-                                thickness: 0,
-                                color: Colors.transparent,
-                              ),
-                              Text(
-                                'Настройки',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
+        child: Container(
+          decoration: BoxDecoration(
+            color: ThemeColors.weatherBackground
+          ),
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.0, 32.0, 0.0, 0.0),
+                child: Column(
+                  children: [
+                    Text("Weather app",
+                        style: TextStyle(
+                            fontSize: 23.0, fontWeight: FontWeight.w800, color: ThemeColors.black)),
+                    InkWell(
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 42.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset('assets/imgs/menuIcons/settings.png'),
+                                VerticalDivider(
+                                  width: 14.0,
+                                  thickness: 0,
+                                  color: Colors.transparent,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  'Настройки',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                      color: ThemeColors.black
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/settings');
-                    },
-                  ),
-                  InkWell(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 42.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset('assets/imgs/menuIcons/like.png'),
-                              VerticalDivider(
-                                width: 14.0,
-                                thickness: 0,
-                                color: Colors.transparent,
-                              ),
-                              Text(
-                                'Избранные',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
+                    InkWell(
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 42.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset('assets/imgs/menuIcons/like.png'),
+                                VerticalDivider(
+                                  width: 14.0,
+                                  thickness: 0,
+                                  color: Colors.transparent,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  'Избранные',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                      color: ThemeColors.black
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/preferences');
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/preferences');
-                    },
-                  ),
-                  InkWell(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 42.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset('assets/imgs/menuIcons/about.png'),
-                              VerticalDivider(
-                                width: 14.0,
-                                thickness: 0,
-                                color: Colors.transparent,
-                              ),
-                              Text(
-                                'О приложении',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
+                    InkWell(
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 42.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset('assets/imgs/menuIcons/about.png'),
+                                VerticalDivider(
+                                  width: 14.0,
+                                  thickness: 0,
+                                  color: Colors.transparent,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  'О приложении',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                      color: ThemeColors.black
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/about');
+                      },
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/about');
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       body: Builder(
         builder: (context) => Container(
           padding: EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 0.0),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/imgs/background_light.png"),
+              image: ThemeImages.background,
               fit: BoxFit.cover,
             ),
           ),
@@ -507,7 +518,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                           Scaffold.of(context).openDrawer();
                         },
                         elevation: 4.0,
-                        fillColor: Color(0xFF0256FF),
+                        fillColor: ThemeColors.menuButtons,
                         child: Icon(
                           Icons.menu,
                           size: 20.0,
@@ -532,7 +543,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
                           Navigator.pushNamed(context, '/addPreference');
                         },
                         elevation: 4.0,
-                        fillColor: Color(0xFF0256FF),
+                        fillColor: ThemeColors.menuButtons,
                         child: Icon(
                           Icons.add,
                           size: 20.0,
