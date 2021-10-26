@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppPreferences extends StatefulWidget {
@@ -32,9 +33,9 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFE2EBFF),
+        backgroundColor: ThemeColors.weatherBackground,
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: ThemeColors.black,
         ),
         elevation: 0.0,
         title: Text(
@@ -42,12 +43,12 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: ThemeColors.black,
           ),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Color(0xFFE2EBFF)),
+        decoration: BoxDecoration(color: ThemeColors.weatherBackground),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: ListView.separated(
@@ -58,7 +59,7 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
 
               return Container(
                 decoration: BoxDecoration(
-                    color: Color(0xFFDEE9FF),
+                    color: ThemeColors.weatherBackground,
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     boxShadow: [
                       BoxShadow(
@@ -68,11 +69,11 @@ class _WeatherAppPreferencesState extends State<WeatherAppPreferences> {
                       ),
                     ]),
                 child: ListTile(
-                  title: Text(word),
+                  title: Text(word, style: TextStyle(color: ThemeColors.black),),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete_forever,
-                      color: Colors.black,
+                      color: ThemeColors.black,
                     ),
                     onPressed: () async {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
