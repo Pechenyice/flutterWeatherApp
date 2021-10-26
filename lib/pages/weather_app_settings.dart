@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_app/helpers/ThemeColors.dart';
+import 'package:flutter_weather_app/helpers/ThemeImages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WeatherAppSettings extends StatefulWidget {
@@ -38,21 +39,13 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
   Widget createSetting(
       name, valuesList, proxyList, proxyName, valuesNamesList) {
 
-    if (proxyName == 'themeSettings') {
-      if (valuesList[1]) {
-        ThemeColors.black = Colors.black;
-      } else {
-        ThemeColors.black = Colors.white;
-      }
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           name,
           style: TextStyle(
-              color: Colors.black87,
+              color: ThemeColors.black,
               fontSize: 14.0,
               fontWeight: FontWeight.w600),
         ),
@@ -74,10 +67,31 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
             isSelected: valuesList,
             borderRadius: BorderRadius.circular(20.0),
             borderWidth: 0.0,
-            color: Colors.black,
+            color: ThemeColors.black,
             selectedColor: Colors.white,
             fillColor: Colors.blue[900],
             onPressed: (int newIndex) async {
+              if (proxyName == 'themeSettings') {
+                if (valuesList[1]) { // light
+                  ThemeColors.black = Colors.black;
+                  ThemeColors.white = Colors.white;
+                  ThemeColors.weatherBackground = Color(0xFFE2EBFF);
+                  ThemeColors.weatherPreview = Color(0xFFE0E9FD);
+                  ThemeColors.weekGradientStart = Color(0xFFCDDAF5);
+                  ThemeColors.weekGradientEnd = Color(0xFF9CBCFF);
+                  ThemeColors.menuButtons = Color(0xFF0256FF);
+                  ThemeImages.background = AssetImage("assets/imgs/background_light.png");
+                } else {
+                  ThemeColors.black = Colors.white;
+                  ThemeColors.white = Colors.black;
+                  ThemeColors.weatherBackground = Color(0xFF0C172B);
+                  ThemeColors.weatherPreview = Color(0xFF0D182C);
+                  ThemeColors.weekGradientStart = Color(0xFF223B70);
+                  ThemeColors.weekGradientEnd = Color(0xFF0F1F40);
+                  ThemeColors.menuButtons = Color(0xFF0A1743);
+                  ThemeImages.background = AssetImage("assets/imgs/background_dark.png");
+                }
+              }
               SharedPreferences prefs = await SharedPreferences.getInstance();
               setState(() {
                 for (int i = 0; i < proxyList.length; i++) {
@@ -120,7 +134,7 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
       appBar: AppBar(
         backgroundColor: ThemeColors.weatherBackground,
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: ThemeColors.black,
         ),
         elevation: 0.0,
         title: Text(
@@ -249,9 +263,9 @@ class _WeatherAppSettingsState extends State<WeatherAppSettings> {
                   MaterialStateProperty.resolveWith<Color>(
                           (states) {
                         if (states.contains(MaterialState.pressed)) {
-                          return Colors.white;
+                          return ThemeColors.white;
                         }
-                        return Color(0xFFEAF0FF);
+                        return ThemeColors.white;
                       }),
                   overlayColor:
                   MaterialStateProperty.resolveWith<Color>(
