@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:flutter_weather_app/helpers/ThemeImages.dart';
 import 'package:http/http.dart';
@@ -18,12 +19,11 @@ class _WeatherAppLoadingState extends State<WeatherAppLoading> {
   String currentCity = 'Санкт-Петербург';
   bool darkTheme = false;
 
-  Future<void> getWeather() async {
-    Response response = await get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$currentCity&cnt=6&appid=f6bd006ca2e0d7841a2d086ff08db0fe'));
+  Future<void> getWeather(Client client) async {
+    Response response = await client.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$currentCity&cnt=6&appid=f6bd006ca2e0d7841a2d086ff08db0fe'));
     Map data = jsonDecode(response.body);
-    weather = data['list'];
-    Navigator.pushReplacementNamed(context, '/', arguments: {
-      'weather': weather
+    setState(() {
+      weather = data['list'];
     });
   }
 
@@ -45,7 +45,10 @@ class _WeatherAppLoadingState extends State<WeatherAppLoading> {
 
   void init() async {
     await initPrefs();
-    await getWeather();
+    await getWeather(Client());
+    await Navigator.pushReplacementNamed(context, '/main', arguments: {
+      'weather': weather
+    });
   }
 
   @override

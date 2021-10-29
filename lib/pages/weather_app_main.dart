@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_app/helpers/ThemeColors.dart';
 import 'package:flutter_weather_app/helpers/ThemeImages.dart';
@@ -82,7 +84,7 @@ class _WeatherAppMainState extends State<WeatherAppMain>
       args = ModalRoute
           .of(context)!
           .settings
-          .arguments as Map;
+          .arguments! as Map;
     } catch(e) {
 
     }

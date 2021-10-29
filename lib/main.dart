@@ -22,7 +22,8 @@ class WeatherApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Manrope'),
       initialRoute: '/loading',
       routes: {
-        '/': (context) => WeatherAppMain(),
+        '/': (context) => Container(),
+        '/main': (context) => WeatherAppMain(),
         '/loading': (context) => WeatherAppLoading(),
         '/settings': (context) => WeatherAppSettings(),
         '/preferences': (context) => WeatherAppPreferences(),
